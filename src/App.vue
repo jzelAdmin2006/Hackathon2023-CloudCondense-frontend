@@ -86,7 +86,7 @@ export default defineComponent({
             <input
               v-if="newStorage.type.requiresUrl"
               v-model="newStorage.url"
-              placeholder="URL"
+              placeholder="URL (http://example.com)"
             />
             <input v-model="newStorage.username" placeholder="Username" />
             <input v-model="newStorage.password" placeholder="Password" />
