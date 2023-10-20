@@ -4,8 +4,14 @@ interface CloudStorage {
   id?: number;
   name: string;
   type: string;
+  url: string;
   username: string;
   password?: string;
+}
+
+export interface StorageType {
+  designation: string;
+  requiresUrl: boolean;
 }
 
 export async function getAllCloudStorages(): Promise<CloudStorage[]> {
@@ -21,7 +27,7 @@ export async function addCloudStorage(
   });
 }
 
-export async function getCloudStorageTypes(): Promise<string[]> {
+export async function getCloudStorageTypes(): Promise<StorageType[]> {
   return request("/cloud-storage/types");
 }
 
