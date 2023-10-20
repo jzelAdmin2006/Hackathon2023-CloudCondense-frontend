@@ -36,7 +36,7 @@ export default defineComponent({
       await addCloudStorage({
         name: newStorage.value.name,
         type: newStorage.value.type.designation,
-        url: newStorage.value.url,
+        url: newStorage.value.type.requiresUrl ? newStorage.value.url : "",
         username: newStorage.value.username,
         password: newStorage.value.password,
       });
