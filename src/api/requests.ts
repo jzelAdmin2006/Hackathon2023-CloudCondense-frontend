@@ -31,6 +31,12 @@ export async function deleteCloudStorage(id: number): Promise<void> {
   });
 }
 
+export async function triggerCondense(id: number): Promise<void> {
+  return request(`/cloud-storage/${id}/condense`, {
+    method: "POST"
+  });
+}
+
 async function request(url: string, options: RequestInit = {}): Promise<any> {
   const headers = {
     "Content-Type": "application/json",

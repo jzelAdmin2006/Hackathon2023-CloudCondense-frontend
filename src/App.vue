@@ -4,11 +4,12 @@ import {
   addCloudStorage,
   deleteCloudStorage,
   getAllCloudStorages,
-  getCloudStorageTypes,
+  getCloudStorageTypes, triggerCondense,
 } from "./api/requests.ts";
 
 export default defineComponent({
   name: "App",
+  methods: {triggerCondense},
   setup() {
     const storages = ref<any[]>([]);
     const newStorage = ref({
@@ -45,7 +46,15 @@ export default defineComponent({
       }
     };
 
-    return { storages, storageTypes, newStorage, addNewStorage, deleteStorage };
+    const condenseStorage = async (id: number) => {
+      try {
+        await triggerCondense(id);
+      } catch (error) {
+        console.error("Condense failed:", error);
+      }
+    };
+
+    return { storages, storageTypes, newStorage, addNewStorage, deleteStorage, condenseStorage };
   },
 });
 </script>
@@ -92,6 +101,9 @@ export default defineComponent({
               <td>{{ storage.username }}</td>
               <td>
                 <button @click="() => deleteStorage(storage.id)">Delete</button>
+              </td>
+              <td>
+                <button @click="() => condenseStorage(storage.id)">Condense</button>
               </td>
             </tr>
           </tbody>
