@@ -5,6 +5,7 @@ import {
   deleteCloudStorage,
   getAllCloudStorages,
   getCloudStorageTypes,
+  StorageType,
 } from "./api/requests.ts";
 
 export default defineComponent({
@@ -13,11 +14,15 @@ export default defineComponent({
     const storages = ref<any[]>([]);
     const newStorage = ref({
       name: "",
-      type: "",
+      type: {
+        designation: "",
+        requiresUrl: false,
+      },
+      url: "",
       username: "",
       password: "",
     });
-    const storageTypes = ref<string[]>([]);
+    const storageTypes = ref<StorageType[]>([]);
 
     const fetchStorages = async () => {
       storages.value = await getAllCloudStorages();
@@ -26,7 +31,13 @@ export default defineComponent({
     fetchStorages();
 
     const addNewStorage = async () => {
-      await addCloudStorage(newStorage.value);
+      await addCloudStorage({
+        name: newStorage.value.name,
+        type: newStorage.value.type.designation,
+        url: newStorage.value.url,
+        username: newStorage.value.username,
+        password: newStorage.value.password,
+      });
       fetchStorages();
     };
 
@@ -64,10 +75,19 @@ export default defineComponent({
           <div class="input-group">
             <input v-model="newStorage.name" placeholder="Name" />
             <select v-model="newStorage.type">
-              <option v-for="type in storageTypes" :key="type" :value="type">
-                {{ type }}
+              <option
+                v-for="type in storageTypes"
+                :key="type.designation"
+                :value="type"
+              >
+                {{ type.designation }}
               </option>
             </select>
+            <input
+              v-if="newStorage.type.requiresUrl"
+              v-model="newStorage.url"
+              placeholder="URL"
+            />
             <input v-model="newStorage.username" placeholder="Username" />
             <input v-model="newStorage.password" placeholder="Password" />
             <button @click="addNewStorage">Add</button>
@@ -88,7 +108,7 @@ export default defineComponent({
           <tbody>
             <tr v-for="storage in storages" :key="storage.id">
               <td>{{ storage.name }}</td>
-              <td>{{ storage.type }}</td>
+              <td>{{ storage.type.designation }}</td>
               <td>{{ storage.username }}</td>
               <td>
                 <button @click="() => deleteStorage(storage.id)">Delete</button>
