@@ -181,7 +181,7 @@ export default defineComponent({
           <h2>
             Configure condense
             <button style="margin-left: 1em" @click="updateCondenseConfig">
-              Save
+              Apply
             </button>
           </h2>
           <div class="input-group">
