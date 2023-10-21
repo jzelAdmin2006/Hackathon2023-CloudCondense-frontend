@@ -1,5 +1,9 @@
 const BASE_URL = "http://localhost:8080";
 
+export interface Metric {
+  savedDiskSpace: number;
+}
+
 export interface GlobalConfig {
   scheduleRate: number;
   condenseAge: number;
@@ -59,6 +63,10 @@ export async function updateGlobalConfig(
 
 export async function getGlobalConfig(): Promise<GlobalConfig> {
   return request("/global-config");
+}
+
+export async function getMetric(): Promise<Metric> {
+  return request("/metric");
 }
 
 async function request(url: string, options: RequestInit = {}): Promise<any> {

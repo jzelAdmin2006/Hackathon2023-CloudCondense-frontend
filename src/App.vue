@@ -10,6 +10,7 @@ import {
   updateGlobalConfig,
   getGlobalConfig,
   GlobalConfig,
+  getMetric,
 } from "./api/requests.ts";
 
 export default defineComponent({
@@ -149,6 +150,26 @@ export default defineComponent({
         oldUnit.multiplier / newUnit.multiplier;
     });
 
+    const totallySaved = ref(0);
+
+    const totallySavedDisplay = computed(() => {
+      if (totallySaved.value < 1) {
+        return `${totallySaved.value * 1000} KB`;
+      } else if (totallySaved.value < 1000) {
+        return `${totallySaved.value.toFixed(2)} MB`;
+      } else if (totallySaved.value < 1000000) {
+        return `${(totallySaved.value / 1000).toFixed(2)} GB`;
+      } else {
+        return `${(totallySaved.value / 1000000).toFixed(2)} TB`;
+      }
+    });
+
+    const fetchSavedDiskSpace = async () => {
+      totallySaved.value = (await getMetric()).savedDiskSpace;
+    };
+
+    fetchSavedDiskSpace();
+
     return {
       storages,
       storageTypes,
@@ -163,6 +184,8 @@ export default defineComponent({
       selectedTimeUnitCondenseAge,
       selectedTimeValueCondenseAge,
       timeUnits,
+      totallySavedDisplay,
+      fetchSavedDiskSpace,
     };
   },
 });
@@ -177,6 +200,21 @@ export default defineComponent({
 
     <div class="content">
       <div class="form-section">
+        <div class="form-group">
+          <h2>
+            Saved storage in total:
+            <bold
+              style="
+                text-decoration-line: underline;
+                text-decoration-style: double;
+              "
+              >{{ totallySavedDisplay }}</bold
+            >
+            <button style="margin-left: 1em" @click="fetchSavedDiskSpace">
+              Refresh
+            </button>
+          </h2>
+        </div>
         <div class="form-group">
           <h2>
             Configure condense
