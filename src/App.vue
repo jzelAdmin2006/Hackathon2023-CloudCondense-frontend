@@ -14,7 +14,33 @@ import {
 
 export default defineComponent({
   name: "App",
-  methods: { triggerCondense },
+  methods: {
+    triggerCondense,
+    blockNonNumeric(event: KeyboardEvent) {
+      if (
+        ![
+          "0",
+          "1",
+          "2",
+          "3",
+          "4",
+          "5",
+          "6",
+          "7",
+          "8",
+          "9",
+          ".",
+          "Backspace",
+          "Delete",
+          "ArrowLeft",
+          "ArrowRight",
+          "Tab",
+        ].includes(event.key)
+      ) {
+        event.preventDefault();
+      }
+    },
+  },
   setup() {
     const storages = ref<any[]>([]);
     const newStorage = ref({
@@ -167,6 +193,7 @@ export default defineComponent({
             </select>
             <input
               v-model.number="selectedTimeValueScheduleRate"
+              @keydown="blockNonNumeric"
               placeholder="Enter value"
             />
 
@@ -178,6 +205,7 @@ export default defineComponent({
             </select>
             <input
               v-model.number="selectedTimeValueCondenseAge"
+              @keydown="blockNonNumeric"
               placeholder="Enter value"
             />
           </div>
