@@ -1,5 +1,10 @@
 const BASE_URL = "http://localhost:8080";
 
+export interface GlobalConfig {
+  scheduleRate: number;
+  condenseAge: number;
+}
+
 interface CloudStorage {
   id?: number;
   name: string;
@@ -39,8 +44,21 @@ export async function deleteCloudStorage(id: number): Promise<void> {
 
 export async function triggerCondense(id: number): Promise<void> {
   return request(`/cloud-storage/${id}/condense`, {
-    method: "POST"
+    method: "POST",
   });
+}
+
+export async function updateGlobalConfig(
+  config: Record<string, any>
+): Promise<void> {
+  return request("/global-config", {
+    method: "PUT",
+    body: JSON.stringify(config),
+  });
+}
+
+export async function getGlobalConfig(): Promise<GlobalConfig> {
+  return request("/global-config");
 }
 
 async function request(url: string, options: RequestInit = {}): Promise<any> {
