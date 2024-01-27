@@ -1,4 +1,4 @@
-const BASE_URL = "http://localhost:8080";
+const BASE_URL = "https://hackathon2023-cloudcondense.onrender.com";
 
 export interface Metric {
   savedDiskSpace: number;
